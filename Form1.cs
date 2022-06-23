@@ -29,7 +29,8 @@ namespace lockitDiff
         UserCredential credential;
         List<string> allFoundedSheets = new List<string>();
         List<string> allParsedFiles = new List<string>();
-
+        DataTable table = new DataTable();
+        
 
         public Form1()
         {
@@ -41,7 +42,13 @@ namespace lockitDiff
             directoryTextBox.ReadOnly = true;
             directoryTextBox.Text = selectedDirectory;
             sheetIDTextBox.Text = sheetID;
-            rangeTextBox.Text = range;  
+            rangeTextBox.Text = range;
+
+            table.Columns.Add("Name", typeof(string)).ReadOnly = true;
+            table.Columns.Add("Sheet", typeof(string)).ReadOnly = true;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            dataGridView1.DataSource = table;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -143,6 +150,7 @@ namespace lockitDiff
                                 else
                                 {
                                     allParsedFiles.Add(val);
+                                    table.Rows.Add(val,sheet);
                                 }
                             }
                         }
