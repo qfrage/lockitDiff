@@ -23,6 +23,13 @@ namespace lockitDiff
     {
         string selectedDirectory = Properties.Settings.Default.directory;
         string sheetID = Properties.Settings.Default.sheetid;
+        string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        // Определить параметры запроса.
+        string range = Properties.Settings.Default.range;
+        UserCredential credential;
+        List<string> allFoundedSheets = new List<string>();
+
+
         public Form1()
         {
             InitializeComponent();
@@ -33,68 +40,7 @@ namespace lockitDiff
             directoryTextBox.ReadOnly = true;
             directoryTextBox.Text = selectedDirectory;
             sheetIDTextBox.Text = sheetID;
-
-            string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-            UserCredential credential;
-            using (var stream =
-               new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
-            {
-                string credPath = System.Environment.GetFolderPath(
-                    System.Environment.SpecialFolder.Personal);
-                credPath = Path.Combine(credPath, ".credentials/sheets.googleapis.com-dotnet-quickstart.json");
-
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-                Console.WriteLine("Credential file saved to: " + credPath);
-            }
-
-            // Создать сервис Google Sheets API.
-            var service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential
-            });
-
-
-            // Определить параметры запроса.
-            String spreadsheetId = "13uungy3pXzqo4eHe8-ZfzM7GFZ3Dida5ASXWJUysRW8";
-            String range = $"Локкит!A2:A5000";
-            //получаем все листы в таблице
-            var sheetRequest = service.Spreadsheets.Get(spreadsheetId);
-            var sheetResponse = sheetRequest.Execute();
-            var sheetsList = sheetResponse.Sheets;
-            for (int i = 0; i < sheetsList.Count; i++)
-            {
-                //Console.WriteLine(sheetsList[i].Properties.Title);
-            }
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                    service.Spreadsheets.Values.Get(spreadsheetId, range);
-            
-            
-
-            ValueRange response = request.Execute();
-            IList<IList<Object>> values = response.Values;
-            List<string> arr = new List<string>();
-
-            if (values != null && values.Count > 0)
-            {
-                foreach (var row in values)
-                {
-                    // Выведите столбцы A и E, соответствующие индексам 0 и 4.
-                    foreach (var val in row)
-                    {
-                        arr.Add(val.ToString());
-                    }
-                }
-                Console.WriteLine(arr.Count);
-            }
-            else
-            {
-                Console.WriteLine("No data found.");
-            }
+            rangeTextBox.Text = range;  
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -133,15 +79,92 @@ namespace lockitDiff
             }
         }
 
+        private void connectToSheets()
+        {
+            range = rangeTextBox.Text;
+            using (var stream =
+                new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            {
+                string credPath = System.Environment.GetFolderPath(
+                    System.Environment.SpecialFolder.Personal);
+                credPath = Path.Combine(credPath, ".credentials/sheets.googleapis.com-dotnet-quickstart.json");
+
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+                Console.WriteLine("Credential file saved to: " + credPath);
+            }
+
+            // Создать сервис Google Sheets API.
+            var service = new SheetsService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential
+            });
+
+
+
+            try
+            {
+                //получаем все листы в таблице
+                var sheetRequest = service.Spreadsheets.Get(sheetID);
+                var sheetResponse = sheetRequest.Execute();
+                var sheetsList = sheetResponse.Sheets;
+                for (int i = 0; i < sheetsList.Count; i++)
+                {
+                    allFoundedSheets.Add(sheetsList[i].Properties.Title);
+                }
+                if (range == null)
+                {
+                    showError("Поле диапазон не может быть пустым\nФормат: \"A1:A5000\"");
+                    return;
+                }
+                foreach (string sheet in allFoundedSheets)
+                {
+                    Console.WriteLine("Лист: "+sheet);
+                    SpreadsheetsResource.ValuesResource.GetRequest request =
+                            service.Spreadsheets.Values.Get(sheetID, sheet+"!"+range);
+
+                    ValueRange response = request.Execute();
+                    IList<IList<Object>> values = response.Values;
+                    if (values != null && values.Count > 0)
+                    {
+                        foreach (var row in values)
+                        {
+                            foreach (string val in row)
+                            {
+                                Console.WriteLine(val);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if(ex.ToString().Contains("HttpStatusCode is NotFound"))showError("Ошибка подключения к таблице\nВозможно, идентификатор введен неправильно\n\n"+"Log:\n"+ex.ToString());
+            }
+        }
+        private void showError(string message)
+        {
+            MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
         private void connectToSheetButton_Click(object sender, EventArgs e)
         {
             if (sheetIDTextBox.Text.Length == 0)
             {
-                MessageBox.Show("Поле идентификатора таблицы ПУСТОЕ!","Сообщение",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                showError("Поле идентификатора таблицы не заполнено");
             }
             else
             {
                 setSheetID(sheetIDTextBox.Text);
+                connectToSheets();
             }
         }
     }

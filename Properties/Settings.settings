@@ -8,5 +8,8 @@
     <Setting Name="sheetid" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="range" Type="System.String" Scope="User">
+      <Value Profile="(Default)">A2:A5000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -35,6 +35,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.connectToSheetButton = new System.Windows.Forms.Button();
             this.browseDirectoryButton = new System.Windows.Forms.Button();
+            this.rangeTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // sheetIDTextBox
@@ -73,7 +75,7 @@
             // 
             // connectToSheetButton
             // 
-            this.connectToSheetButton.Location = new System.Drawing.Point(346, 36);
+            this.connectToSheetButton.Location = new System.Drawing.Point(434, 35);
             this.connectToSheetButton.Name = "connectToSheetButton";
             this.connectToSheetButton.Size = new System.Drawing.Size(75, 23);
             this.connectToSheetButton.TabIndex = 4;
@@ -83,7 +85,7 @@
             // 
             // browseDirectoryButton
             // 
-            this.browseDirectoryButton.Location = new System.Drawing.Point(346, 82);
+            this.browseDirectoryButton.Location = new System.Drawing.Point(328, 83);
             this.browseDirectoryButton.Name = "browseDirectoryButton";
             this.browseDirectoryButton.Size = new System.Drawing.Size(75, 23);
             this.browseDirectoryButton.TabIndex = 5;
@@ -91,11 +93,29 @@
             this.browseDirectoryButton.UseVisualStyleBackColor = true;
             this.browseDirectoryButton.Click += new System.EventHandler(this.browseDirectoryButton_Click);
             // 
+            // rangeTextBox
+            // 
+            this.rangeTextBox.Location = new System.Drawing.Point(328, 36);
+            this.rangeTextBox.Name = "rangeTextBox";
+            this.rangeTextBox.Size = new System.Drawing.Size(100, 22);
+            this.rangeTextBox.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(331, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 16);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Диапазон";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 671);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.rangeTextBox);
             this.Controls.Add(this.browseDirectoryButton);
             this.Controls.Add(this.connectToSheetButton);
             this.Controls.Add(this.label2);
@@ -119,6 +139,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button connectToSheetButton;
         private System.Windows.Forms.Button browseDirectoryButton;
+        private System.Windows.Forms.TextBox rangeTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 

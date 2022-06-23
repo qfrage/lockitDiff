@@ -46,5 +46,17 @@ namespace lockitDiff.Properties {
                 this["sheetid"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("A2:A5000")]
+        public string range {
+            get {
+                return ((string)(this["range"]));
+            }
+            set {
+                this["range"] = value;
+            }
+        }
     }
 }
