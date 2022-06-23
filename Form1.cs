@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Text.RegularExpressions;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
@@ -28,6 +28,7 @@ namespace lockitDiff
         string range = Properties.Settings.Default.range;
         UserCredential credential;
         List<string> allFoundedSheets = new List<string>();
+        List<string> allParsedFiles = new List<string>();
 
 
         public Form1()
@@ -135,9 +136,17 @@ namespace lockitDiff
                         {
                             foreach (string val in row)
                             {
-                                Console.WriteLine(val);
+                                if (Regex.Match(val, "[А-Яа-яЁё]").Success)
+                                {
+                                    Console.WriteLine(val + " с символами");
+                                }
+                                else
+                                {
+                                    allParsedFiles.Add(val);
+                                }
                             }
                         }
+                        Console.WriteLine(allParsedFiles.Count);
                     }
                     else
                     {
