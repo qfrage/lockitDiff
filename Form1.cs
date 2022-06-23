@@ -21,6 +21,8 @@ namespace lockitDiff
 {
     public partial class Form1 : Form
     {
+        string selectedDirectory = Properties.Settings.Default.directory;
+        string sheetID = Properties.Settings.Default.sheetid;
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +30,10 @@ namespace lockitDiff
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            directoryTextBox.ReadOnly = true;
+            directoryTextBox.Text = selectedDirectory;
+            sheetIDTextBox.Text = sheetID;
+
             string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
             UserCredential credential;
             using (var stream =
@@ -88,6 +94,54 @@ namespace lockitDiff
             else
             {
                 Console.WriteLine("No data found.");
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void setDirectory(string path)
+        {
+            selectedDirectory = path;
+            directoryTextBox.Text = selectedDirectory;
+            Properties.Settings.Default.directory = selectedDirectory;
+            Properties.Settings.Default.Save();
+
+        }
+
+        private void setSheetID(string id)
+        {
+            sheetID = id;
+            sheetIDTextBox.Text = id;
+            Properties.Settings.Default.sheetid = sheetID;
+            Properties.Settings.Default.Save();
+        }
+
+        private void browseDirectoryButton_Click(object sender, EventArgs e)
+        {
+            if(selectedDirectory.Length != 0) folderBrowserDialog1.SelectedPath = selectedDirectory;
+            if(folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                setDirectory(folderBrowserDialog1.SelectedPath);
+            }
+        }
+
+        private void connectToSheetButton_Click(object sender, EventArgs e)
+        {
+            if (sheetIDTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Поле идентификатора таблицы ПУСТОЕ!","Сообщение",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+            else
+            {
+                setSheetID(sheetIDTextBox.Text);
             }
         }
     }
