@@ -29,8 +29,9 @@ namespace lockitDiff
         UserCredential credential;
         List<string> allFoundedSheets = new List<string>();
         List<string> allParsedFiles = new List<string>();
+        List<string> allFoundedFilesInDirectory = new List<string>();
         DataTable table = new DataTable();
-        
+        string[] languages = {"ar","de","en","es","fa","fr","hi","id","it","nl","pl","pt","ro","ru","th","tr","uk","vi","zh" };
 
         public Form1()
         {
@@ -46,6 +47,7 @@ namespace lockitDiff
 
             table.Columns.Add("Name", typeof(string)).ReadOnly = true;
             table.Columns.Add("Sheet", typeof(string)).ReadOnly = true;
+
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             dataGridView1.DataSource = table;
@@ -86,7 +88,22 @@ namespace lockitDiff
                 setDirectory(folderBrowserDialog1.SelectedPath);
             }
         }
-
+        private void findInDirectory()
+        {
+            foreach(string file in allParsedFiles)
+            {
+                int foundedLanguages = 0;
+                foreach (string dir in Directory.GetFiles(selectedDirectory, "*.ogg", SearchOption.AllDirectories))
+                {
+                    if (dir.Contains(file))
+                    {
+                        foundedLanguages++;
+                    }
+                }
+                table.Rows.Add(file,foundedLanguages.ToString());
+            }
+            Console.WriteLine("Ready");
+        }
         private void connectToSheets()
         {
             range = rangeTextBox.Text;
@@ -145,22 +162,22 @@ namespace lockitDiff
                             {
                                 if (Regex.Match(val, "[А-Яа-яЁё]").Success)
                                 {
-                                    Console.WriteLine(val + " с символами");
+                                    Console.WriteLine("Откинуто: "+val +":конец откинутого");
                                 }
                                 else
                                 {
                                     allParsedFiles.Add(val);
-                                    table.Rows.Add(val,sheet);
                                 }
                             }
                         }
-                        Console.WriteLine(allParsedFiles.Count);
                     }
                     else
                     {
                         Console.WriteLine("No data found.");
                     }
+
                 }
+                findInDirectory();
             }
             catch (Exception ex)
             {
