@@ -51,10 +51,13 @@ namespace lockitDiff
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             directoryTextBox.ReadOnly = true;
             directoryTextBox.Text = selectedDirectory;
             sheetIDTextBox.Text = sheetID;
             rangeTextBox.Text = range;
+
+            currentSheetLabel.AutoSize = true;
 
             table.Columns.Add("Name", typeof(string)).ReadOnly = true;
             table.Columns.Add("Sheet", typeof(string)).ReadOnly = true;
@@ -102,20 +105,30 @@ namespace lockitDiff
         }
         private void findInDirectory()
         {
+            int iter = 0;
             foreach(lockitFile file in lockitFiles)
             {
+                iter++;
+                if(iter%(lockitFiles.Count/100) == 0)progressBar1.PerformStep();
+                currentSheetLabel.Text = "Проверяем " + file;
                 table.Rows.Add(file.filename,file.mySheet, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
                 for(var i = 0; i < languages.Length; i++)
                 {
-                    foreach (string dir in Directory.GetFiles(selectedDirectory +"\\"+ languages[i], "*.ogg", SearchOption.AllDirectories))
+                    if (Directory.Exists(selectedDirectory + "\\" + languages[i]))
                     {
-                        if (dir.Contains(file.filename+".ogg"))
+                        Console.WriteLine(languages[i]);
+                        currentSheetLabel.Text = "Проверяем " + file.filename + "[" + languages[i] + "]";
+                        foreach (string dir in Directory.GetFiles(selectedDirectory + "\\" + languages[i], "*.ogg", SearchOption.AllDirectories))
                         {
-                            DataRow dr = table.Rows[table.Rows.Count-1];
-                            dr[2 + i] = "+";
-                            break;
+                            if (dir.Contains(file.filename + ".ogg"))
+                            {
+                                DataRow dr = table.Rows[table.Rows.Count - 1];
+                                dr[2 + i] = "+";
+                                break;
+                            }
                         }
                     }
+                    else Console.WriteLine(selectedDirectory+"\\"+languages[i]+" не найдена директория");
                 }
                 Application.DoEvents();
             }
@@ -124,6 +137,7 @@ namespace lockitDiff
         }
         private void connectToSheets()
         {
+            currentSheetLabel.Text = "Инициализация ключа";
             range = rangeTextBox.Text;
             using (var stream =
                 new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
@@ -140,7 +154,7 @@ namespace lockitDiff
                     new FileDataStore(credPath, true)).Result;
                 Console.WriteLine("Credential file saved to: " + credPath);
             }
-
+            currentSheetLabel.Text = "Инициализация сервиса";
             // Создать сервис Google Sheets API.
             var service = new SheetsService(new BaseClientService.Initializer()
             {
@@ -152,6 +166,7 @@ namespace lockitDiff
             try
             {
                 //получаем все листы в таблице
+                currentSheetLabel.Text = "Получение всех листов";
                 var sheetRequest = service.Spreadsheets.Get(sheetID);
                 var sheetResponse = sheetRequest.Execute();
                 var sheetsList = sheetResponse.Sheets;

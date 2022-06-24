@@ -39,6 +39,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.currentSheetLabel = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -130,11 +131,20 @@
             this.currentSheetLabel.Size = new System.Drawing.Size(0, 16);
             this.currentSheetLabel.TabIndex = 9;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(585, 58);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(333, 23);
+            this.progressBar1.Step = 1;
+            this.progressBar1.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 671);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.currentSheetLabel);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
@@ -167,6 +177,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label currentSheetLabel;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
