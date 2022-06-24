@@ -38,6 +38,7 @@
             this.rangeTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.currentSheetLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,11 +122,20 @@
             this.dataGridView1.Size = new System.Drawing.Size(824, 477);
             this.dataGridView1.TabIndex = 8;
             // 
+            // currentSheetLabel
+            // 
+            this.currentSheetLabel.AutoSize = true;
+            this.currentSheetLabel.Location = new System.Drawing.Point(582, 113);
+            this.currentSheetLabel.Name = "currentSheetLabel";
+            this.currentSheetLabel.Size = new System.Drawing.Size(0, 16);
+            this.currentSheetLabel.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 671);
+            this.Controls.Add(this.currentSheetLabel);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.rangeTextBox);
@@ -156,6 +166,7 @@
         private System.Windows.Forms.TextBox rangeTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label currentSheetLabel;
     }
 }
 
