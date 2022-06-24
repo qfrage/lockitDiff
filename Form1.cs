@@ -23,15 +23,17 @@ namespace lockitDiff
     {
         string selectedDirectory = Properties.Settings.Default.directory;
         string sheetID = Properties.Settings.Default.sheetid;
+        string[] languages = { "en", "ar","de","es","fa","fr","hi","id","it","nl","pl","pt","ro","ru","th","tr","uk","vi","zh" };
         string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-        // Определить параметры запроса.
         string range = Properties.Settings.Default.range;
+
+        int checkInAllLanguages = 1;
+
         UserCredential credential;
         List<string> allFoundedSheets = new List<string>();
         List<string> allParsedFiles = new List<string>();
         List<string> allFoundedFilesInDirectory = new List<string>();
         DataTable table = new DataTable();
-        string[] languages = {"ar","de","en","es","fa","fr","hi","id","it","nl","pl","pt","ro","ru","th","tr","uk","vi","zh" };
         private struct lockitFile
         {
             public string filename;
@@ -61,6 +63,7 @@ namespace lockitDiff
 
             table.Columns.Add("Name", typeof(string)).ReadOnly = true;
             table.Columns.Add("Sheet", typeof(string)).ReadOnly = true;
+            table.Columns.Add("Matched", typeof(int)).ReadOnly = false;
             for (var i = 0; i < languages.Length; i++) table.Columns.Add(languages[i],typeof(string)).ReadOnly=false;
 
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -111,8 +114,11 @@ namespace lockitDiff
                 iter++;
                 if(iter%(lockitFiles.Count/100) == 0)progressBar1.PerformStep();
                 currentSheetLabel.Text = "Проверяем " + file;
-                table.Rows.Add(file.filename,file.mySheet, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
-                for(var i = 0; i < languages.Length; i++)
+                table.Rows.Add(file.filename,file.mySheet,0, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
+                int matchedCounter = 0;
+                DataRow dr = table.Rows[table.Rows.Count - 1];
+                var size = checkInAllLanguages;
+                for (var i = 0; i < size; i++)
                 {
                     if (Directory.Exists(selectedDirectory + "\\" + languages[i]))
                     {
@@ -122,15 +128,38 @@ namespace lockitDiff
                         {
                             if (dir.Contains(file.filename + ".ogg"))
                             {
-                                DataRow dr = table.Rows[table.Rows.Count - 1];
-                                dr[2 + i] = "+";
+                                matchedCounter++;
+                                dr[3 + i] = "+";
+                                dr[2] = matchedCounter;
                                 break;
                             }
                         }
                     }
-                    else Console.WriteLine(selectedDirectory+"\\"+languages[i]+" не найдена директория");
+                    else Console.WriteLine(selectedDirectory + "\\" + languages[i] + " не найдена директория");
                 }
                 Application.DoEvents();
+            }
+            if(Directory.Exists(selectedDirectory + "\\en"))
+            {
+                Console.WriteLine("Popal");
+                foreach (string file in Directory.GetFiles(selectedDirectory + "\\en","*.ogg", SearchOption.AllDirectories))
+                {
+                    bool founded = false;
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+                    lockitFile dismatchedFile = new lockitFile(fileName,"Не в локките");
+                    foreach(lockitFile fileFromSheets in lockitFiles)
+                    {
+                        if(fileName == fileFromSheets.filename)
+                        {
+                            founded = true;
+                            break;
+                        }
+                    }
+                    if (!founded)
+                    {
+                        table.Rows.Add(dismatchedFile.filename, dismatchedFile.mySheet, 0, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
+                    }
+                }
             }
             currentSheetLabel.Text = "Файлы проверены";
             Console.WriteLine("Ready");
@@ -237,6 +266,12 @@ namespace lockitDiff
                 setSheetID(sheetIDTextBox.Text);
                 connectToSheets();
             }
+        }
+
+        private void allLanguageCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allLanguageCheckBox.Checked) checkInAllLanguages = languages.Length;
+            else checkInAllLanguages = 1;
         }
     }
 }

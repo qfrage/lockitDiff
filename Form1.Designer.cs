@@ -40,6 +40,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.currentSheetLabel = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.allLanguageCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -139,11 +140,23 @@
             this.progressBar1.Step = 1;
             this.progressBar1.TabIndex = 10;
             // 
+            // allLanguageCheckBox
+            // 
+            this.allLanguageCheckBox.AutoSize = true;
+            this.allLanguageCheckBox.Location = new System.Drawing.Point(15, 108);
+            this.allLanguageCheckBox.Name = "allLanguageCheckBox";
+            this.allLanguageCheckBox.Size = new System.Drawing.Size(95, 20);
+            this.allLanguageCheckBox.TabIndex = 11;
+            this.allLanguageCheckBox.Text = "Все языки";
+            this.allLanguageCheckBox.UseVisualStyleBackColor = true;
+            this.allLanguageCheckBox.CheckedChanged += new System.EventHandler(this.allLanguageCheckBox_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 671);
+            this.Controls.Add(this.allLanguageCheckBox);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.currentSheetLabel);
             this.Controls.Add(this.dataGridView1);
@@ -178,6 +191,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label currentSheetLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.CheckBox allLanguageCheckBox;
     }
 }
 
