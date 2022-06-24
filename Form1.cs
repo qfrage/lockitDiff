@@ -117,6 +117,7 @@ namespace lockitDiff
                     if (Directory.Exists(selectedDirectory + "\\" + languages[i]))
                     {
                         currentSheetLabel.Text = "Проверяем " + file.filename + "[" + languages[i] + "]";
+                        Application.DoEvents();
                         foreach (string dir in Directory.GetFiles(selectedDirectory + "\\" + languages[i], "*.ogg", SearchOption.AllDirectories))
                         {
                             if (dir.Contains(file.filename + ".ogg"))
