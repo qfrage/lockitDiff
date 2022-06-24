@@ -28,6 +28,7 @@ namespace lockitDiff
         string range = Properties.Settings.Default.range;
 
         int checkInAllLanguages = 1;
+        bool checkProjInLockit = false;
 
         UserCredential credential;
         List<string> allFoundedSheets = new List<string>();
@@ -108,6 +109,7 @@ namespace lockitDiff
         }
         private void findInDirectory()
         {
+            
             int iter = 0;
             foreach(lockitFile file in lockitFiles)
             {
@@ -139,25 +141,28 @@ namespace lockitDiff
                 }
                 Application.DoEvents();
             }
-            if(Directory.Exists(selectedDirectory + "\\en"))
+            if (checkProjInLockit)
             {
-                Console.WriteLine("Popal");
-                foreach (string file in Directory.GetFiles(selectedDirectory + "\\en","*.ogg", SearchOption.AllDirectories))
+                if (Directory.Exists(selectedDirectory + "\\en"))
                 {
-                    bool founded = false;
-                    string fileName = Path.GetFileNameWithoutExtension(file);
-                    lockitFile dismatchedFile = new lockitFile(fileName,"Не в локките");
-                    foreach(lockitFile fileFromSheets in lockitFiles)
+                    Console.WriteLine("Popal");
+                    foreach (string file in Directory.GetFiles(selectedDirectory + "\\en", "*.ogg", SearchOption.AllDirectories))
                     {
-                        if(fileName == fileFromSheets.filename)
+                        bool founded = false;
+                        string fileName = Path.GetFileNameWithoutExtension(file);
+                        lockitFile dismatchedFile = new lockitFile(fileName, "Не в локките");
+                        foreach (lockitFile fileFromSheets in lockitFiles)
                         {
-                            founded = true;
-                            break;
+                            if (fileName == fileFromSheets.filename)
+                            {
+                                founded = true;
+                                break;
+                            }
                         }
-                    }
-                    if (!founded)
-                    {
-                        table.Rows.Add(dismatchedFile.filename, dismatchedFile.mySheet, 0, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
+                        if (!founded)
+                        {
+                            table.Rows.Add(dismatchedFile.filename, dismatchedFile.mySheet, 0, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-");
+                        }
                     }
                 }
             }
@@ -166,6 +171,11 @@ namespace lockitDiff
         }
         private void connectToSheets()
         {
+            table.Clear();
+            allParsedFiles.Clear();
+            allFoundedSheets.Clear();
+            allFoundedFilesInDirectory.Clear();
+            progressBar1.Value = 0;
             currentSheetLabel.Text = "Инициализация ключа";
             range = rangeTextBox.Text;
             using (var stream =
@@ -272,6 +282,11 @@ namespace lockitDiff
         {
             if (allLanguageCheckBox.Checked) checkInAllLanguages = languages.Length;
             else checkInAllLanguages = 1;
+        }
+
+        private void projInLockitCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            checkProjInLockit = projInLockitCheckBox.Checked;
         }
     }
 }

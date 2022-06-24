@@ -41,12 +41,13 @@
             this.currentSheetLabel = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.allLanguageCheckBox = new System.Windows.Forms.CheckBox();
+            this.projInLockitCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // sheetIDTextBox
             // 
-            this.sheetIDTextBox.Location = new System.Drawing.Point(12, 36);
+            this.sheetIDTextBox.Location = new System.Drawing.Point(12, 31);
             this.sheetIDTextBox.Name = "sheetIDTextBox";
             this.sheetIDTextBox.Size = new System.Drawing.Size(308, 22);
             this.sheetIDTextBox.TabIndex = 0;
@@ -54,7 +55,7 @@
             // 
             // directoryTextBox
             // 
-            this.directoryTextBox.Location = new System.Drawing.Point(12, 84);
+            this.directoryTextBox.Location = new System.Drawing.Point(12, 79);
             this.directoryTextBox.Name = "directoryTextBox";
             this.directoryTextBox.Size = new System.Drawing.Size(308, 22);
             this.directoryTextBox.TabIndex = 1;
@@ -63,7 +64,7 @@
             // spreadsheetIDLabel
             // 
             this.spreadsheetIDLabel.AutoSize = true;
-            this.spreadsheetIDLabel.Location = new System.Drawing.Point(12, 17);
+            this.spreadsheetIDLabel.Location = new System.Drawing.Point(12, 12);
             this.spreadsheetIDLabel.Name = "spreadsheetIDLabel";
             this.spreadsheetIDLabel.Size = new System.Drawing.Size(100, 16);
             this.spreadsheetIDLabel.TabIndex = 2;
@@ -72,7 +73,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 65);
+            this.label2.Location = new System.Drawing.Point(12, 60);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 16);
             this.label2.TabIndex = 3;
@@ -151,11 +152,23 @@
             this.allLanguageCheckBox.UseVisualStyleBackColor = true;
             this.allLanguageCheckBox.CheckedChanged += new System.EventHandler(this.allLanguageCheckBox_CheckedChanged);
             // 
+            // projInLockitCheckBox
+            // 
+            this.projInLockitCheckBox.AutoSize = true;
+            this.projInLockitCheckBox.Location = new System.Drawing.Point(116, 108);
+            this.projInLockitCheckBox.Name = "projInLockitCheckBox";
+            this.projInLockitCheckBox.Size = new System.Drawing.Size(134, 20);
+            this.projInLockitCheckBox.TabIndex = 12;
+            this.projInLockitCheckBox.Text = "Финалы с доком";
+            this.projInLockitCheckBox.UseVisualStyleBackColor = true;
+            this.projInLockitCheckBox.CheckedChanged += new System.EventHandler(this.projInLockitCheckBox_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1110, 671);
+            this.Controls.Add(this.projInLockitCheckBox);
             this.Controls.Add(this.allLanguageCheckBox);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.currentSheetLabel);
@@ -192,6 +205,7 @@
         private System.Windows.Forms.Label currentSheetLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.CheckBox allLanguageCheckBox;
+        private System.Windows.Forms.CheckBox projInLockitCheckBox;
     }
 }
 
