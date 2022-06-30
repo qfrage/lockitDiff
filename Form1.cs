@@ -132,13 +132,12 @@ namespace lockitDiff
                             {
                                 matchedCounter++;
                                 dr[3 + i] = "+";
-                                dr[2] = matchedCounter;
-                                break;
                             }
                         }
                     }
                     else Console.WriteLine(selectedDirectory + "\\" + languages[i] + " не найдена директория");
                 }
+                dr[2] = matchedCounter;
                 Application.DoEvents();
             }
             if (checkProjInLockit)
