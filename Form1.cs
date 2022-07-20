@@ -166,6 +166,19 @@ namespace lockitDiff
                 }
             }
             currentSheetLabel.Text = "Файлы проверены";
+            foreach(lockitFile f in lockitFiles)
+            {
+                if((f.mySheet).Contains("Архив"))
+                {
+                    foreach(string s in Directory.GetFiles(selectedDirectory+"\\en","*.ogg",SearchOption.AllDirectories))
+                    {
+                        if (s.Contains(f.filename))
+                        {
+                            File.Delete(s);
+                        }
+                    }
+                }
+            }
             Console.WriteLine("Ready");
         }
         private void connectToSheets()
